@@ -2,38 +2,49 @@
 import { join } from 'path';
 
 // Packages
-import { BrowserWindow, app } from 'electron';
+import { BrowserWindow, app, ipcMain } from 'electron';
 import isDev from 'electron-is-dev';
+import { DynamicIslandType } from './type';
 
-const height = 100;
-const width = 250;
+const dynamicIsland: { [type in DynamicIslandType]: { width: number; height: number } } = {
+  normal: { width: 193, height: 37 },
+  short: { width: 125, height: 37 },
+  square: { width: 83, height: 83 },
+  expand: { width: 373, height: 83 },
+  maximum: { width: 373, height: 200 },
+};
 
 function createWindow() {
-  // Create the browser window.
+  const { width, height } = dynamicIsland.normal;
   const window = new BrowserWindow({
     width,
     height,
-    //  change to false to use AppBar
     frame: false,
     show: true,
     resizable: false,
     fullscreenable: false,
     transparent: true,
-    // webPreferences: {
-    //   preload: join(__dirname, 'preload.js'),
-    // },
+    webPreferences: {
+      preload: join(__dirname, 'preload.js'),
+    },
   });
 
   const port = process.env.PORT || 3000;
   const url = isDev ? `http://localhost:${port}` : join(__dirname, '../dist/index.html');
 
-  // and load the index.html of the app.
   if (isDev) {
     window?.loadURL(url);
   } else {
     window?.loadFile(url);
   }
   window.center();
+
+  ipcMain.on('resize', (event, payload: DynamicIslandType) => {
+    const { width, height } = dynamicIsland[payload];
+    window.setSize(width, height);
+
+    event.reply('IPC_RENDERER_CHANNEL_NAME', 'message');
+  });
 }
 
 // This method will be called when Electron has finished
