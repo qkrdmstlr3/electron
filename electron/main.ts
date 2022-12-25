@@ -14,18 +14,19 @@ const dynamicIsland: { [type in DynamicIslandType]: { width: number; height: num
   maximum: { width: 373, height: 200 },
 };
 
-const MAX_WIDTH = 373;
+const MAX_WIDTH = 600;
+const MAX_WIDTH_DEV = 800;
 
 function createWindow() {
   const { height } = dynamicIsland.normal;
   const window = new BrowserWindow({
-    width: MAX_WIDTH,
-    height,
+    width: isDev ? MAX_WIDTH_DEV : MAX_WIDTH,
+    height: isDev ? 800 : height,
     frame: false,
     show: true,
     resizable: false,
     fullscreenable: false,
-    transparent: true,
+    transparent: !isDev,
     webPreferences: {
       preload: join(__dirname, 'preload.js'),
     },
@@ -42,10 +43,13 @@ function createWindow() {
   window.center();
 
   ipcMain.on('resize', (event, payload: DynamicIslandType) => {
+    if (isDev) {
+      return;
+    }
     const { height } = dynamicIsland[payload];
     window.setSize(MAX_WIDTH, height);
 
-    event.reply('IPC_RENDERER_CHANNEL_NAME', 'message');
+    event.reply('resize', 'resize success');
   });
 }
 

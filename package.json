@@ -25,6 +25,7 @@
   "homepage": "https://github.com/qkrdmstlr3/electron#readme",
   "dependencies": {
     "@vanilla-extract/css": "^1.9.2",
+    "framer-motion": "^8.0.2",
     "polished": "^4.2.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
