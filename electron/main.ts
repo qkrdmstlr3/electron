@@ -14,10 +14,12 @@ const dynamicIsland: { [type in DynamicIslandType]: { width: number; height: num
   maximum: { width: 373, height: 200 },
 };
 
+const MAX_WIDTH = 373;
+
 function createWindow() {
-  const { width, height } = dynamicIsland.normal;
+  const { height } = dynamicIsland.normal;
   const window = new BrowserWindow({
-    width,
+    width: MAX_WIDTH,
     height,
     frame: false,
     show: true,
@@ -40,8 +42,8 @@ function createWindow() {
   window.center();
 
   ipcMain.on('resize', (event, payload: DynamicIslandType) => {
-    const { width, height } = dynamicIsland[payload];
-    window.setSize(width, height);
+    const { height } = dynamicIsland[payload];
+    window.setSize(MAX_WIDTH, height);
 
     event.reply('IPC_RENDERER_CHANNEL_NAME', 'message');
   });

@@ -1,3 +1,5 @@
+import { appStyle } from './style.css';
+
 function App() {
   const resize = () => {
     console.log(window);
@@ -5,10 +7,7 @@ function App() {
   };
 
   return (
-    <div
-      style={{ backgroundColor: '#000', width: '193px', height: '37px', color: 'white', borderRadius: '1000px' }}
-      onClick={resize}
-    >
+    <div className={appStyle} onClick={resize}>
       dynamic island
     </div>
   );
