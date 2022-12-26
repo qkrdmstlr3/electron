@@ -1,8 +1,8 @@
 import { appStyle } from './style.css';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
-
-type DynamicIslandType = 'normal' | 'short' | 'square' | 'expand' | 'maximum';
+import { DynamicIslandType } from '../electron/type';
+import { Clock } from './widgets/Clock';
 
 const dynamicIsland: { [type in DynamicIslandType]: { width: number; height: number } } = {
   normal: { width: 289.5, height: 55.5 },
@@ -30,7 +30,7 @@ function App() {
       className={appStyle}
       onClick={resize}
     >
-      dynamic island
+      <Clock />
     </motion.div>
   );
 }
